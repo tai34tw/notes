@@ -109,7 +109,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ``` shell
     echo "vm.overcommit_memory = 1" | sudo tee -a /etc/sysctl.conf
     ```
-    ![setOverCommitMemoryTo1](./redis-6.0.5-install-centOS7_img/setOverCommitMemoryTo1.png) 
+    ![configOverCommitMemoryTo1](./redis-6.0.5-install-centOS7_img/configOverCommitMemoryTo1.png)  
     備註:瞭解overcommit_memory參數設定: [[10]](#[10])[[11]](#[11])
 - 監聽佇列的長度(預設:128): [[12]](#[12])
     ``` shell
