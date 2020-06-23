@@ -110,8 +110,8 @@ $ sudo cp src/redis-cli /usr/local/bin/
     echo "vm.overcommit_memory = 1" | sudo tee -a /etc/sysctl.conf
     ```
     ![setOverCommitMemoryTo1](./redis-6.0.5-install-centOS7_img/setOverCommitMemoryTo1.png) 
-    備註:瞭解overcommit_memory參數設定:[[10]](#[10])[[11]](#[11])
-- 監聽佇列的長度(預設:128):[[12]](#[12])
+    備註:瞭解overcommit_memory參數設定: [[10]](#[10])[[11]](#[11])
+- 監聽佇列的長度(預設:128): [[12]](#[12])
     ``` shell
     echo "net.core.somaxconn = 2048" | sudo tee -a /etc/sysctl.conf
     ```
