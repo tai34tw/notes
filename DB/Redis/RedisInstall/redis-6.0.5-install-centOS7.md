@@ -119,7 +119,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 
 
 ## 關閉Server [[13]](#[13])  
-### 不知道是不是最好的方法，但能關掉Server，客戶端指令如下:
+### 可能不是好方法，但能關掉Server，客戶端指令如下:
 ```shell
 $ redis-cli SHUTDOWN NOSAVE
 ```
