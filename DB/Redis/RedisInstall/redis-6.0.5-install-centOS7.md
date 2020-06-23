@@ -128,7 +128,7 @@ $ redis-cli SHUTDOWN NOSAVE
 
 ## 參考來源:
 1. https://redis.io/download <a name='[1]'></a>
-2. https://linuxize.com/post/how-to-install-and-configure-redis-on-centos-7/<a name='[2]]'></a>
+2. https://linuxize.com/post/how-to-install-and-configure-redis-on-centos-7/ <a name='[2]]'></a>
 3. https://www.itread01.com/content/1547765307.html <a name='[3]'></a>
 4. https://dotblogs.com.tw/jakeuj/2015/12/24/Redis <a name='[4]'></a>  
 5. https://www.cnblogs.com/operationhome/p/10342258.html <a name='[5]'></a>  
@@ -136,7 +136,7 @@ $ redis-cli SHUTDOWN NOSAVE
 7. https://stackoverflow.com/questions/51030702/how-to-write-in-etc-profile-using-bash-permission-denied <a name='[7]'></a> 
 8. https://www.cnblogs.com/zhaoshunjie/p/5907029.html <a name='[8]'></a> 
 9. https://github.com/antirez/redis/issues/2126 <a name='[9]'></a> 
-10. https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-captun<a name='[10]]'></a> 
-11. https://blog.csdn.net/hjx_1000/article/details/46412557<a name='[11]]'></a> 
-12. https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/424386/<a name='[13]]'></a> 
-13. https://redis.io/commands/shutdown<a name='[12]]'></a> 
+10. https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-captun <a name='[10]'></a> 
+11. https://blog.csdn.net/hjx_1000/article/details/46412557 <a name='[11]'></a> 
+12. https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/424386 <a name='[12]'></a> 
+13. https://redis.io/commands/shutdown <a name='[13]'></a> 
