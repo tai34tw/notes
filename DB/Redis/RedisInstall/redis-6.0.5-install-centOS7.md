@@ -173,7 +173,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 
 ## 開啟外部訪問
 ## 使用
-# //TODO
+## //TODO
 <div align="center">
 <a href="#目錄">回到目錄</a>
 </div>
