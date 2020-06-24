@@ -14,7 +14,7 @@
 ---
 
 ## 安裝 
-### 使用以下指令下載，提取和編譯Redis： [[1]](#[1])[[2]](#[2])
+### 使用以下指令下載，提取和編譯Redis： [[1]](#[1]) [[2]](#[2])
 ``` shell
 $ wget http://download.redis.io/releases/redis-6.0.5.tar.gz
 $ tar xzf redis-6.0.5.tar.gz
