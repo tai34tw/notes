@@ -1,5 +1,14 @@
 # Redis-6.0.5安裝-以CentOS 7為例
 <p style="text-align:right;">2020.06.23 蔡元泰製</p> 
+    
+- [安裝](#安裝)        
+- [測試](#測試)        
+- [啟動](#啟動)          
+- [使用內建客戶端與Redis溝通](#使用內建客戶端與redis溝通)          
+- [快速執行](#快速執行)           
+- [參數調整(僅參考)](#參數調整僅參考)       
+- [關閉Server](#關閉server)           
+- [參考來源](#參考來源)
 
 ## 安裝 [[1]](#[1])[[2]](#[2])
 ### 使用以下指令下載，提取和編譯Redis：
@@ -38,7 +47,7 @@ $ make distclean && make
 安裝成功:   
 > ![installationSucceeds](./redis-6.0.5-install-centOS7_img/install/installationSucceeds.png)  
 
-## 測試: 
+## 測試 
 ### 使用以下指令執行Redis運行測試：
 ```shell
 $ cd redis-6.0.5
@@ -144,7 +153,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
     查看原先開啟的Server端視窗
     ![shutdownRedisAndNoSave](./redis-6.0.5-install-centOS7_img/shutDown/kill-9RedisServer.png) 
 
-## 參考來源:
+## 參考來源
 1. https://redis.io/download <a name='[1]'></a>
 2. https://linuxize.com/post/how-to-install-and-configure-redis-on-centos-7/ <a name='[2]]'></a>
 3. https://www.itread01.com/content/1547765307.html <a name='[3]'></a>
@@ -157,5 +166,5 @@ $ sudo cp src/redis-cli /usr/local/bin/
 10. https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-captun <a name='[10]'></a> 
 11. https://blog.csdn.net/hjx_1000/article/details/46412557 <a name='[11]'></a> 
 12. https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/424386 <a name='[12]'></a> 
-13. http://www.jeepxie.net/article/964280.html <a name='13]'></a> 
+13. http://www.jeepxie.net/article/964280.html <a name='[13]'></a> 
 14. https://redis.io/commands/shutdown <a name='[14]'></a> 
