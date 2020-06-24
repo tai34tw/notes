@@ -237,7 +237,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 
 ## 參考來源
 1. https://redis.io/download <a name='[1]'></a>
-2. https://linuxize.com/post/how-to-install-and-configure-redis-on-centos-7/ <a name='[2]]'></a>
+2. https://linuxize.com/post/how-to-install-and-configure-redis-on-centos-7/ <a name='[2]'></a>
 3. https://www.itread01.com/content/1547765307.html <a name='[3]'></a>
 4. https://dotblogs.com.tw/jakeuj/2015/12/24/Redis <a name='[4]'></a>  
 5. https://www.cnblogs.com/operationhome/p/10342258.html <a name='[5]'></a>  
