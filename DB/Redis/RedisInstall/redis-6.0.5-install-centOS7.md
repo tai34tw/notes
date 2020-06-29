@@ -6,8 +6,10 @@
 - [測試](#測試)        
 - [啟動](#啟動)          
 - [使用內建客戶端與Redis溝通](#使用內建客戶端與redis溝通)          
-- [快速執行](#快速執行)           
-- [關閉Server](#關閉server)     
+- [快速執行](#快速執行)
+- [安裝Redis(加強版)](#安裝Redis(加強版))         
+- [關閉Server](#關閉server)  
+- [開啟外部訪問](#開啟外部訪問)      
 - [ 管理工具(Windows 10為例)](#管理工具windows-10為例)    
 - [參考來源](#參考來源)
 
@@ -50,7 +52,7 @@ $ make distclean && make
 安裝成功:   
 > ![installationSucceeds](./redis-6.0.5-install-centOS7_img/install/installationSucceeds.png)  
 
-<div align="center">
+<div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
 
@@ -80,7 +82,7 @@ $ make test
 
 運行測試通過:   
 ![testSucceeds](./redis-6.0.5-install-centOS7_img/install/testSucceeds.png)  
-<div align="center">
+<div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
 
@@ -121,7 +123,7 @@ $ src/redis-server
 運行成功:
 ![runServerAfterResloveTHPError](./redis-6.0.5-install-centOS7_img/install/runServerAfterResloveTHPError.png)
  
-<div align="center">
+<div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
 
@@ -139,7 +141,7 @@ $ src/redis-cli
 ![setData](./redis-6.0.5-install-centOS7_img/install/setData.png) 
 - 搜尋資料: $ get foo  
 ![getData](./redis-6.0.5-install-centOS7_img/install/getData.png) 
-<div align="center">
+<div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
 
@@ -165,38 +167,106 @@ $ sudo cp src/redis-cli /usr/local/bin/
   ```
      ![getData](./redis-6.0.5-install-centOS7_img/install/interactWithRedisDirectly.png)   
 
-<div align="center">
+<div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
 
 ---
 
-## 開啟外部訪問
-## 使用
-## //TODO
-<div align="center">
-<a href="#目錄">回到目錄</a>
-</div>
+## 安裝Redis(加強版)
+### 使用以下指令更適當地安裝Redis，以保存數據：[[96]](#[96])
+1. 假設已經將redis-server和redis-cli可執行文件複製到/usr/local/bin下，可透過以下指令檢查.
+    ```shell
+    $ cd /
+    $ cd /usr/local/bin
+    $ ls
+    ```
+    ![checkRedisFile](./redis-6.0.5-install-centOS7_img/installProperly/checkRedisFile.png)  
+2. 創建一個目錄，用於存儲您Redis配置文件和數據：
+    ``` shell
+    $ cd /
+    $ sudo mkdir /etc/redis
+    $ sudo mkdir /var/redis
+    ```
+3. 找到當初下載Redis檔案處之初始化腳本(以「安裝」之redis-6.0.5為範例)，複製至/etc/init.d/下，官方建議以port為命名.
+    ```shell
+    $ sudo cp utils/redis_init_script /etc/init.d/redis_6379
+    ```  
+    ![copyScript](./redis-6.0.5-install-centOS7_img/installProperly/copyScript.png) 
+4. 編輯其腳本
+   ```shell
+   $ sudo vim /etc/init.d/redis_6379
+    ```
+    - 依據port修改REDISPORT, 其PIDFILE和CONF路徑皆取決於port (例如6379).
+    ![configScript](./redis-6.0.5-install-centOS7_img/installProperly/configScript.png)  
+5. 找到當初下載Redis檔案處(同步驟1)之配置文件模板, 複製到/etc/redis /中
+    - 名稱與port相同(例如6379)
+   ```shell
+   $ sudo cp redis.conf /etc/redis/6379.conf
+    ```
+    ![copyConfig](./redis-6.0.5-install-centOS7_img/installProperly/copyConfig.png) 
+6. 創建一個目錄，供Redis之數據和工作目錄使用
+   ```shell
+   $ sudo mkdir /var/redis/6379
+    ```
+7. 編輯配置文件，確保執行以下更改(直接google翻譯) (路人翻譯版, 請詳見: https://kknews.cc/zh-tw/code/y326ymk.html)： [[96]](#[96])
+    ``` shell
+    $ sudo vim /etc/redis/6379.conf 
+    ```  
+    - line: 206  
+    將守護程序(daemonize)設置為'yes' (默認情況下設置為'no'). 
+        ![configConf-daemonize](./redis-6.0.5-install-centOS7_img/installProperly/configConf-daemonize.png)  
+    - line: 228
+    將pidfile設置為/var/run/redis_6379.pid (如果需要，請修改port).
+        ![configConf-pidfile](./redis-6.0.5-install-centOS7_img/installProperly/configConf-pidfile.png)  
+    - 相應地更改port.在本件範例中，使用默認的port (6379)，因此不需要修改.
+            ![configConf-port](./redis-6.0.5-install-centOS7_img/installProperly/configConf-port.png)  
+    - line: 236  
+    設置日誌級別.
+        ![configConf-loglevel](./redis-6.0.5-install-centOS7_img/installProperly/configConf-loglevel.png)  
+    - line: 241 (日誌檔案的地址)  
+    將日誌文件設置為/var/log/redis_6379.log, 該路徑一定要是文件夾.  
+        ![configConf-logfile](./redis-6.0.5-install-centOS7_img/installProperly/configConf-logfile.png)  
+    - line: 346 (數據持久存放處)  
+        將目錄設置為/var/redis/6379 (非常重要的步驟！).  
+        ![configConf-dir](./redis-6.0.5-install-centOS7_img/installProperly/configConf-dir.png) 
+    - line: 69 (供外部訪問)  
+        將ip修改為本機(虛擬機)ip.
+    ![configConf-ip](./redis-6.0.5-install-centOS7_img/installProperly/configConf-ip.png) 
+
+    備註: 若不好找可用/搜尋關鍵字.
+8. 將新的Redis腳本設為預設執行
+    ```shell
+    $ sudo update-rc.d redis_6379 defaults
+    ```
 
 ---
 
 ## 關閉Server
 ### 在客戶端使用以下指令關閉Server:
-- 正常退出: [[98]](#[98])
+- 官方建議方法，確保在退出之前將數據保存:
+    ```shell
+    $ redis-cli shutdown
+    ```
+    查看原先開啟的Server端視窗 
+    ![shutdown](./redis-6.0.5-install-centOS7_img/shutDown/shutdown.png)  
+
+- 可能不是好方法，但能正常退出: [[98]](#[98])
+  - 應該與上者類似，但未將數據保存.
+  ```shell
+  $ redis-cli SHUTDOWN NOSAVE
+  ```
+  查看原先開啟的Server端視窗  
+   ![shutdownRedisServerAndNoSave](./redis-6.0.5-install-centOS7_img/shutDown/shutdownRedisServerAndNoSave.png)  
+
+- 正常退出，但有時候不成功: [[99]](#[99])
     ```shell
     $ pkill redis-server
     ```
      查看原先開啟的Server端視窗  
      ![pkillRedisServer](./redis-6.0.5-install-centOS7_img/shutDown/pkillRedisServer.png) 
 
-- 可能不是好方法，但能關掉Server: [[99]](#[99])
-    ```shell
-    $ redis-cli SHUTDOWN NOSAVE
-    ```
-    查看原先開啟的Server端視窗  
-     ![shutdownRedisServerAndNoSave](./redis-6.0.5-install-centOS7_img/shutDown/shutdownRedisServerAndNoSave.png) 
-
-- 強制關閉(沒有log釋出): [[98]](#[98])
+- 強制關閉(沒有log釋出): [[99]](#[99])
     ```shell
     $ ps -a # 查看現有redis-server之PID
     $ kill -9 3365 # 3365為該server之PID
@@ -204,6 +274,19 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ![kill-9RedisServerCode](./redis-6.0.5-install-centOS7_img/shutDown/kill-9RedisServerCode.png)  
     查看原先開啟的Server端視窗  
     ![kill-9RedisServer](./redis-6.0.5-install-centOS7_img/shutDown/kill-9RedisServer.png)
+
+---
+
+## 開啟外部訪問
+##  使用以下指令使其Redis允許外部訪問:
+1. 
+
+
+<div style="text-align:center;">
+<a href="#目錄">回到目錄</a>
+</div>
+
+---
 
 ## 管理工具(Windows 10為例)
 ### 使用以下指令於cmd下操作:
@@ -229,7 +312,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ![redisCommander-chrome](./redis-6.0.5-install-centOS7_img/redis-commander/redisCommander-chrome.png)  
 
 附註:其他管理工具GUI: [[101]](#[101])  
-<div align="center">
+<div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
 
@@ -249,7 +332,9 @@ $ sudo cp src/redis-cli /usr/local/bin/
 11. https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-captun <a name='[11]'></a> 
 12. https://blog.csdn.net/hjx_1000/article/details/46412557 <a name='[12]'></a> 
 13. https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/424386 <a name='[13]'></a> 
-14. http://www.jeepxie.net/article/964280.html <a name='[98]'></a> 
-15. https://redis.io/commands/shutdown <a name='[99]'></a> 
-16. https://www.npmjs.com/package/redis-commander <a name='[100]'></a>
-17. https://redislabs.com/blog/so-youre-looking-for-the-redis-gui/ <a name='[101]'></a>
+14. https://redis.io/topics/quickstart <a name='[96]'></a> 
+15. https://www.itread01.com/content/1546782362.html [97]'></a> 
+16. https://redis.io/commands/shutdown <a name='[98]'></a> 
+17.  http://www.jeepxie.net/article/964280.html <a name='[99]'></a> 
+18. https://www.npmjs.com/package/redis-commander <a name='[100]'></a>
+19. https://redislabs.com/blog/so-youre-looking-for-the-redis-gui/ <a name='[101]'></a>
