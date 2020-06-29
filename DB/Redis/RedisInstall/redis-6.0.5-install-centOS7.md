@@ -28,7 +28,7 @@ $ make distclean && make
 > ![ccNotFound](./redis-6.0.5-install-centOS7_img/install/ccNotFound.png)  
 > 執行:  
 >   1. $ cd redis-6.0.5
->   2. $ (sudo) yum install gcc 
+>   2. $ [sudo] yum install gcc 
 >   3. 驗證gcc是否安裝成功: $ rpm -qa |grep gcc   
 > ![testGccInstallation](./redis-6.0.5-install-centOS7_img/install/testGccInstallation.png)  
 >   4. $ make   
@@ -41,8 +41,8 @@ $ make distclean && make
 > 執行:
 >   1. $ cd redis-6.0.5
 >   2. $ make distclean # 清除編譯生成的文件.   
->   3. $ (sudo) yum -y install centos-release-scl
->   4. $ (sudo) yum -y install devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
+>   3. $ [sudo] yum -y install centos-release-scl
+>   4. $ [sudo] yum -y install devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
 >   5. $ scl enable devtoolset-9 bash # scl指令啟用只是臨時的，退出shell或重新打開一個shell就會恢復原系統gcc版本.
 >   6. $ sudo sh -c "echo source /opt/rh/devtoolset-9/enable >> /etc/profile" # 執行以永久使用. [[7]](#[7])
 >   7. 重打shell (或重開機)，再次編譯. 
@@ -69,7 +69,7 @@ $ make test
 > ![runTestError](./redis-6.0.5-install-centOS7_img/install/runTestError.png)  
 >   執行:  
 >   1. $ cd redis-6.0.5
->   2. $ (sudo) yum install tcl   
+>   2. $ [sudo] yum install tcl   
 >   3. 驗證tcl版本: $ echo "puts [info tclversion]" | tclsh   
 > ![testTclVersion](./redis-6.0.5-install-centOS7_img/install/testTclVersion.png)  
 >    
@@ -174,7 +174,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 ---
 
 ## 安裝Redis(加強版)
-### 使用以下指令更適當地安裝Redis，以保存數據：[[96]](#[96])
+### 使用以下指令更適當地安裝Redis，以保存數據：[[95]](#[95])
 1. 假設已經將redis-server和redis-cli可執行文件複製到/usr/local/bin下，可透過以下指令檢查.
     ```shell
     $ cd /
@@ -219,7 +219,8 @@ $ sudo cp src/redis-cli /usr/local/bin/
     - line: 228
     將pidfile設置為/var/run/redis_6379.pid (如果需要，請修改port).
         ![configConf-pidfile](./redis-6.0.5-install-centOS7_img/installProperly/configConf-pidfile.png)  
-    - 相應地更改port.在本件範例中，使用默認的port (6379)，因此不需要修改.
+    - line: 228 (更改port)  
+    在本件範例中，使用默認的port (6379)，因此不需要修改.
             ![configConf-port](./redis-6.0.5-install-centOS7_img/installProperly/configConf-port.png)  
     - line: 236  
     設置日誌級別.
@@ -231,7 +232,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
         將目錄設置為/var/redis/6379 (非常重要的步驟！).  
         ![configConf-dir](./redis-6.0.5-install-centOS7_img/installProperly/configConf-dir.png) 
     - line: 69 (供外部訪問)  
-        將ip修改為本機(虛擬機)ip.
+        將ip (預設127.0.0.1)修改為本機(虛擬機) ip.
     ![configConf-ip](./redis-6.0.5-install-centOS7_img/installProperly/configConf-ip.png) 
 
     備註: 若不好找可用/搜尋關鍵字.
@@ -239,6 +240,30 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ```shell
     $ sudo update-rc.d redis_6379 defaults
     ```
+> ### 可能錯誤:
+>  ![updateDefaults](./redis-6.0.5-install-centOS7_img/installProperly/updateDefaults.png) 
+> - sudo update-rc.d redis_6379 defaults 可能為Ubuntu 指令, CentOS不受用.  
+> 執行:  [[97]](#[97])  
+> $ [sudo] chkconfig --add redis_6379   
+> $ [sudo] chkconfig redis_6379 on
+
+9. 執行修改後的Redis
+```shell
+$ sudo /etc/init.d/redis_6379 start
+```
+10. 檢視redis是否已經啟動  
+```shell
+$ ps -ef | grep redis  
+```
+- 啟動成功
+ ![checkServerStatus](./redis-6.0.5-install-centOS7_img/installProperly/checkServerStatus.png) 
+
+11.  透過客戶端檢視Redis是否執行成功
+```shell
+redis-cli -h 192.168.200.136 -p 6379
+```
+- 啟動成功
+ ![checkServerStatusByCli](./redis-6.0.5-install-centOS7_img/installProperly/checkServerStatusByCli.png) 
 
 ---
 
@@ -246,7 +271,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 ### 在客戶端使用以下指令關閉Server:
 - 官方建議方法，確保在退出之前將數據保存:
     ```shell
-    $ redis-cli shutdown
+    $ redis-cli SHUTDOWN
     ```
     查看原先開啟的Server端視窗 
     ![shutdown](./redis-6.0.5-install-centOS7_img/shutDown/shutdown.png)  
@@ -274,7 +299,10 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ![kill-9RedisServerCode](./redis-6.0.5-install-centOS7_img/shutDown/kill-9RedisServerCode.png)  
     查看原先開啟的Server端視窗  
     ![kill-9RedisServer](./redis-6.0.5-install-centOS7_img/shutDown/kill-9RedisServer.png)
-
+    
+<div style="text-align:center;">
+<a href="#目錄">回到目錄</a>
+</div>
 ---
 
 ## 開啟外部訪問
@@ -332,9 +360,10 @@ $ sudo cp src/redis-cli /usr/local/bin/
 11. https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-captun <a name='[11]'></a> 
 12. https://blog.csdn.net/hjx_1000/article/details/46412557 <a name='[12]'></a> 
 13. https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/424386 <a name='[13]'></a> 
-14. https://redis.io/topics/quickstart <a name='[96]'></a> 
-15. https://www.itread01.com/content/1546782362.html [97]'></a> 
-16. https://redis.io/commands/shutdown <a name='[98]'></a> 
-17.  http://www.jeepxie.net/article/964280.html <a name='[99]'></a> 
-18. https://www.npmjs.com/package/redis-commander <a name='[100]'></a>
-19. https://redislabs.com/blog/so-youre-looking-for-the-redis-gui/ <a name='[101]'></a>
+14. https://redis.io/topics/quickstart <a name='[95]'></a> 
+15. https://www.itread01.com/content/1546782362.html <a name='[96]'></a> 
+16. https://unix.stackexchange.com/questions/65398/converting-update-rc-d-redis-6379-defaults-to-chkconfig-command <a name='[97]'></a> 
+17. https://redis.io/commands/shutdown <a name='[98]'></a> 
+18.  http://www.jeepxie.net/article/964280.html <a name='[99]'></a> 
+19. https://www.npmjs.com/package/redis-commander <a name='[100]'></a>
+20. https://redislabs.com/blog/so-youre-looking-for-the-redis-gui/ <a name='[101]'></a>
