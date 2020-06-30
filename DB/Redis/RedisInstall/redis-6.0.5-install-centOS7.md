@@ -10,7 +10,7 @@
 - [安裝Redis(加強版)](#安裝Redis(加強版))         
 - [關閉Server](#關閉server)  
 - [開啟外部訪問](#開啟外部訪問)      
-- [ 管理工具(Windows 10為例)](#管理工具windows-10為例)    
+- [管理工具(Windows 10為例)](#管理工具windows-10為例)    
 - [參考來源](#參考來源)
 
 ---
@@ -82,6 +82,7 @@ $ make test
 
 運行測試通過:   
 ![testSucceeds](./redis-6.0.5-install-centOS7_img/install/testSucceeds.png)  
+
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
@@ -97,7 +98,7 @@ $ src/redis-server
 > ### 可能錯誤:
 > ![runRedisWithError](./redis-6.0.5-install-centOS7_img/install/runRedisWithError.png) 
 > - WARNING: The TCP backlog setting of 511 cannot be... (監聽佇列的長度預設128):   
->       執行: [[13]](#[13])  
+>       執行: [[10]](#[10])  
 >    $ echo "net.core.somaxconn = 2048" | sudo tee -a /etc/sysctl.conf  
 >   ![configsomaxconn](./redis-6.0.5-install-centOS7_img/config/configsomaxconn.png)
 > 
@@ -108,7 +109,7 @@ $ src/redis-server
 >  備註: 其他參數設定詳見: [[11]](#[11])[[12]](#[12]) 
 > 
 > - WARNING you have Transparent Huge Pages (THP) support enabled in your kernel (你使用的是透明大頁，可能導致redis延遲和內存使用問題)....  
-> 執行: [[10]](#[10])  
+> 執行: [[13]](#[13])  
 >   - 暫時解決方法  
 >   1. $ sudo su # 切換至root帳號，用sudo無法  
 >   2. \# echo never > /sys/kernel/mm/transparent_hugepage/enabled
@@ -137,10 +138,11 @@ $ src/redis-cli
 ```  
 ![interactWithRedis](./redis-6.0.5-install-centOS7_img/install/interactWithRedis.png) 
 
-- 新增資料: $ set foo bar  
+- 新增資料: > set foo bar  
 ![setData](./redis-6.0.5-install-centOS7_img/install/setData.png) 
-- 搜尋資料: $ get foo  
+- 搜尋資料: > get foo  
 ![getData](./redis-6.0.5-install-centOS7_img/install/getData.png) 
+
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
@@ -174,7 +176,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 ---
 
 ## 安裝Redis(加強版)
-### 使用以下指令更適當地安裝Redis，以保存數據：[[95]](#[95])
+### 使用以下指令更適當地安裝Redis，以保存數據：[[14]](#[14])
 1. 假設已經將redis-server和redis-cli可執行文件複製到/usr/local/bin下，可透過以下指令檢查.
     ```shell
     $ cd /
@@ -209,7 +211,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
    ```shell
    $ sudo mkdir /var/redis/6379
     ```
-7. 編輯配置文件，確保執行以下更改(直接google翻譯) (路人翻譯版, 請詳見: https://kknews.cc/zh-tw/code/y326ymk.html)： [[96]](#[96])
+7. 編輯配置文件，確保執行以下更改(直接google翻譯) (路人翻譯版, 請詳見: https://kknews.cc/zh-tw/code/y326ymk.html)： [[15]](#[15])
     ``` shell
     $ sudo vim /etc/redis/6379.conf 
     ```  
@@ -231,8 +233,8 @@ $ sudo cp src/redis-cli /usr/local/bin/
     - line: 346 (數據持久存放處)  
         將目錄設置為/var/redis/6379 (非常重要的步驟！).  
         ![configConf-dir](./redis-6.0.5-install-centOS7_img/installProperly/configConf-dir.png) 
-    - line: 69 (供外部訪問)  
-        將ip (預設127.0.0.1)修改為本機(虛擬機) ip.
+    - line: 69 (供外部訪問)<a name='(供外部訪問)'></a>  
+        將ip (預設127.0.0.1)修改為本(虛擬)機ip.
     ![configConf-ip](./redis-6.0.5-install-centOS7_img/installProperly/configConf-ip.png) 
 
     備註: 若不好找可用/搜尋關鍵字.
@@ -243,7 +245,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 > ### 可能錯誤:
 >  ![updateDefaults](./redis-6.0.5-install-centOS7_img/installProperly/updateDefaults.png) 
 > - sudo update-rc.d redis_6379 defaults 可能為Ubuntu 指令, CentOS不受用.  
-> 執行:  [[97]](#[97])  
+> 執行:  [[16]](#16])  
 > $ [sudo] chkconfig --add redis_6379   
 > $ [sudo] chkconfig redis_6379 on
 
@@ -265,6 +267,10 @@ redis-cli -h 192.168.200.136 -p 6379
 - 啟動成功
  ![checkServerStatusByCli](./redis-6.0.5-install-centOS7_img/installProperly/checkServerStatusByCli.png) 
 
+ <div style="text-align:center;">
+<a href="#目錄">回到目錄</a>
+</div>
+
 ---
 
 ## 關閉Server
@@ -276,7 +282,7 @@ redis-cli -h 192.168.200.136 -p 6379
     查看原先開啟的Server端視窗 
     ![shutdown](./redis-6.0.5-install-centOS7_img/shutDown/shutdown.png)  
 
-- 可能不是好方法，但能正常退出: [[98]](#[98])
+- 可能不是好方法，但能正常退出: [[17]](#[17])
   - 應該與上者類似，但未將數據保存.
   ```shell
   $ redis-cli SHUTDOWN NOSAVE
@@ -284,14 +290,14 @@ redis-cli -h 192.168.200.136 -p 6379
   查看原先開啟的Server端視窗  
    ![shutdownRedisServerAndNoSave](./redis-6.0.5-install-centOS7_img/shutDown/shutdownRedisServerAndNoSave.png)  
 
-- 正常退出，但有時候不成功: [[99]](#[99])
+- 正常退出，但有時候不成功: [[18]](#[18])
     ```shell
     $ pkill redis-server
     ```
      查看原先開啟的Server端視窗  
      ![pkillRedisServer](./redis-6.0.5-install-centOS7_img/shutDown/pkillRedisServer.png) 
 
-- 強制關閉(沒有log釋出): [[99]](#[99])
+- 強制關閉(沒有log釋出): [[19]](#[19])
     ```shell
     $ ps -a # 查看現有redis-server之PID
     $ kill -9 3365 # 3365為該server之PID
@@ -303,12 +309,41 @@ redis-cli -h 192.168.200.136 -p 6379
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
+
 ---
 
 ## 開啟外部訪問
-##  使用以下指令使其Redis允許外部訪問:
-1. 
-
+###  使用以下指令使其Redis允許外部訪問:
+1. 編輯配置文件，確保執行以下更改(步驟同「安裝Redis(加強版)」[(供外部訪問)](#(供外部訪問))： [[15]](#[15])
+    ``` shell
+    $ sudo vim /etc/redis/6379.conf 
+    ```
+    將ip (預設127.0.0.1)修改為本(虛擬)機ip.
+    ![configConf-ip](./redis-6.0.5-install-centOS7_img/installProperly/configConf-ip.png) 
+> ### 可能錯誤:
+> - 外部無法連線   
+>   \> telnet 192.168.200.136 6379  
+>     ![testConnection](./redis-6.0.5-install-centOS7_img/connect/telnetCentOS6379.png)
+>   透過MobaXterm之掃port工具(上方工具列Tools > Ports scanner), Cent OS未外開Redis的port.
+>   ![portsScanner](./redis-6.0.5-install-centOS7_img/connect/portsScanner.png)
+> 執行:
+>   1. 確認防火牆是否開啟   
+>      $ firewall-cmd --zone=public --list-all  
+>   ![checkFirewall](./redis-6.0.5-install-centOS7_img/connect/checkFirewall.png)
+>   2. 對外開放 6379 port  
+>      $ firewall-cmd --zone=public --add-port=6379/tcp --permanent  
+> 備註: --permanent 指定為永久設定，否則在 firewalld 重啟或是重新讀取設定，就會失效.
+> ![enablePort6379](./redis-6.0.5-install-centOS7_img/connect/enablePort6379.png)
+>   3. 重新讀取 firewall 設定  
+>   $ firewall-cmd --reload
+> ![reloadFirewall](./redis-6.0.5-install-centOS7_img/connect/reloadFirewall.png)
+>   4. 與步驟1同，再檢查一次指定port是否在開放清單內  
+>       $ firewall-cmd --zone=public --list-all 
+>    ![recheckFirewall](./redis-6.0.5-install-centOS7_img/connect/recheckFirewall.png)
+>   5. 重新從本地端cmd測試  
+>    \> telnet 192.168.200.136 6379  
+>     成功, 就是黑黑的一片.  
+>   ![retestConnection](./redis-6.0.5-install-centOS7_img/connect/retelnetCentOS6379.png)
 
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
@@ -318,28 +353,30 @@ redis-cli -h 192.168.200.136 -p 6379
 
 ## 管理工具(Windows 10為例)
 ### 使用以下指令於cmd下操作:
-1. 檢查有無npm環境:
-    ```shell
-    > npm -v
-    ```
-   - 有
-         ![getNpmVersion](./redis-6.0.5-install-centOS7_img/redis-commander/getNpmVersion.png)
-   - 無  
-     請自行安裝.
-2. 安裝redis-commander [[100]](#[100])
-   ```shell
-   > npm install -g redis-commander
-   ```
-    ![installRedisCommander](./redis-6.0.5-install-centOS7_img/redis-commander/installRedisCommander.png)
-3. 啟動redis-commander
-    ```shell
-    > redis-commander
-    ```
-    ![runRedisCommander](./redis-6.0.5-install-centOS7_img/redis-commander/runRedisCommander.png)  
-4. 將上述畫面ip (http://127.0.0.1:8081)以瀏覽器開啟  
-    ![redisCommander-chrome](./redis-6.0.5-install-centOS7_img/redis-commander/redisCommander-chrome.png)  
+- Redis-commander
+  1. 檢查有無npm環境:
+      ```shell
+      > npm -v
+      ```
+     - 有
+           ![getNpmVersion](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/getNpmVersion.png)
+     - 無  
+       請自行安裝.
+  2. 安裝redis-commander [[19]](#[19])  
+     ```shell
+     > npm install -g redis-commander
+     ```
+      ![installRedisCommander](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/installRedisCommander.png)
+  3. 啟動redis-commander
+      ```shell
+      > redis-commander
+      ```
+      ![runRedisCommander](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/runRedisCommander.png)  
+  4. 將上述畫面ip (http://127.0.0.1:8081)以瀏覽器開啟  
+      ![redisCommander-chrome](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/redisCommander-chrome.png)  
 
-附註:其他管理工具GUI: [[101]](#[101])  
+備註:其他管理工具GUI: [[20]](#[20]) 
+
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
@@ -356,14 +393,18 @@ redis-cli -h 192.168.200.136 -p 6379
 7. https://stackoverflow.com/questions/51030702/how-to-write-in-etc-profile-using-bash-permission-denied <a name='[7]'></a> 
 8. https://www.cnblogs.com/zhaoshunjie/p/5907029.html <a name='[8]'></a> 
 9. https://github.com/antirez/redis/issues/2126 <a name='[9]'></a> 
-10. https://www.jianshu.com/p/7ca4b74c92be  <a name='[10]'></a> 
+10. https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/424386 <a name='[10]'></a> 
 11. https://access.redhat.com/documentation/zh-tw/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-memory-captun <a name='[11]'></a> 
 12. https://blog.csdn.net/hjx_1000/article/details/46412557 <a name='[12]'></a> 
-13. https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/424386 <a name='[13]'></a> 
-14. https://redis.io/topics/quickstart <a name='[95]'></a> 
-15. https://www.itread01.com/content/1546782362.html <a name='[96]'></a> 
-16. https://unix.stackexchange.com/questions/65398/converting-update-rc-d-redis-6379-defaults-to-chkconfig-command <a name='[97]'></a> 
-17. https://redis.io/commands/shutdown <a name='[98]'></a> 
-18.  http://www.jeepxie.net/article/964280.html <a name='[99]'></a> 
-19. https://www.npmjs.com/package/redis-commander <a name='[100]'></a>
-20. https://redislabs.com/blog/so-youre-looking-for-the-redis-gui/ <a name='[101]'></a>
+13. https://www.jianshu.com/p/7ca4b74c92be  <a name='[13]'></a>  
+14. https://redis.io/topics/quickstart <a name='[14]'></a> 
+15. https://www.itread01.com/content/1546782362.html <a name='[15]'></a> 
+16. https://unix.stackexchange.com/questions/65398/converting-update-rc-d-redis-6379-defaults-to-chkconfig-command <a name='[16]'></a> 
+17. https://redis.io/commands/shutdown <a name='[17]'></a> 
+18. http://www.jeepxie.net/article/964280.html <a name='[18]'></a> 
+19. https://www.npmjs.com/package/redis-commander <a name='[19]'></a>
+20. https://redislabs.com/blog/so-youre-looking-for-the-redis-gui/ <a name='[20]'></a>
+
+<div style="text-align:center;">
+<a href="#目錄">回到目錄</a>
+</div>
