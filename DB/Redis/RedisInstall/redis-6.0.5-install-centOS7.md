@@ -218,7 +218,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
     - line: 206  
     將守護程序(daemonize)設置為'yes' (默認情況下設置為'no'). 
         ![configConf-daemonize](./redis-6.0.5-install-centOS7_img/installProperly/configConf-daemonize.png)  
-    - line: 228
+    - line: 228  
     將pidfile設置為/var/run/redis_6379.pid (如果需要，請修改port).
         ![configConf-pidfile](./redis-6.0.5-install-centOS7_img/installProperly/configConf-pidfile.png)  
     - line: 228 (更改port)  
