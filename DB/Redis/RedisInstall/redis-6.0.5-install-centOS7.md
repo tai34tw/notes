@@ -368,12 +368,18 @@ redis-cli -h 192.168.200.136 -p 6379
      ```
       ![installRedisCommander](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/installRedisCommander.png)
   3. 啟動redis-commander
-      ```shell
-      > redis-commander
-      ```
-      ![runRedisCommander](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/runRedisCommander.png)  
+       - 連結本地端Server
+            ```shell
+            > redis-commander
+            ```
+            ![runRedisCommander](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/runRedisCommander.png)  
+        - 連結至外部Redis
+            ```shell
+            redis-commander --redis-host 192.168.200.136 --redis-port 6379
+            ```
   4. 將上述畫面ip (http://127.0.0.1:8081)以瀏覽器開啟  
-      ![redisCommander-chrome](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/redisCommander-chrome.png)  
+      ![redisCommander-chrome](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/redisCommander-chrome.png)
+
 
 備註:其他管理工具GUI: [[20]](#[20]) 
 
