@@ -111,15 +111,15 @@ $ src/redis-server
 > - WARNING you have Transparent Huge Pages (THP) support enabled in your kernel (你使用的是透明大頁，可能導致redis延遲和內存使用問題)....  
 > 執行: [[13]](#[13])  
 >   - 暫時解決方法  
->   1. $ sudo su # 切換至root帳號，用sudo無法  
->   2. \# echo never > /sys/kernel/mm/transparent_hugepage/enabled
->   3. \# exit # 切換回User帳號
+>       1. $ sudo su # 切換至root帳號，用sudo無法  
+>       2. \# echo never > /sys/kernel/mm/transparent_hugepage/enabled
+>       3. \# exit # 切換回User帳號
 >   </br> </br>
 >   - 永久解決方法  
->   1. $ sudo su
->   2. \# vim /etc/rc.local
->   3. 加上 echo never > /sys/kernel/mm/transparent_hugepage/enabled  
->   4. \# exit  
+>       1. $ sudo su
+>       2. \# vim /etc/rc.local
+>       3. 加上 echo never > /sys/kernel/mm/transparent_hugepage/enabled  
+>       4. \# exit  
 > 
 運行成功:
 ![runServerAfterResloveTHPError](./redis-6.0.5-install-centOS7_img/install/runServerAfterResloveTHPError.png)
