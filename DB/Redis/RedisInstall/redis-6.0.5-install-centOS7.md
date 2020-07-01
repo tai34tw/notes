@@ -18,6 +18,7 @@
 ## 安裝 
 ### 使用以下指令下載，提取和編譯Redis： [[1]](#[1]) [[2]](#[2])
 ``` shell
+$ cd /opt
 $ wget http://download.redis.io/releases/redis-6.0.5.tar.gz
 $ tar xzf redis-6.0.5.tar.gz
 $ cd redis-6.0.5
@@ -211,19 +212,23 @@ $ sudo cp src/redis-cli /usr/local/bin/
    ```shell
    $ sudo mkdir /var/redis/6379
     ```
-7. 編輯配置文件，確保執行以下更改(直接google翻譯) (路人翻譯版, 請詳見: https://kknews.cc/zh-tw/code/y326ymk.html)： [[15]](#[15])
+7. 編輯配置文件，確保執行以下更改(直接google翻譯) (路人翻譯版, 請詳見: https://kknews.cc/zh-tw/code/y326ymk.html): [[14]](#[14])[[15]](#[15])
     ``` shell
     $ sudo vim /etc/redis/6379.conf 
     ```  
+    - line: 69 (選用,供外部訪問)<a name='(供外部訪問)'></a>  
+    將ip (預設127.0.0.1)修改為本(虛擬)機ip.  
+    綁定多個ip, 可使用bind 127.0.0.1 192.168.200.136  
+        ![configConf-ip](./redis-6.0.5-install-centOS7_img/installProperly/configConf-ip.png) 
+    - line: 92 (更改port)  
+    在本件範例中，使用默認的port (6379)，因此不需要修改.
+        ![configConf-port](./redis-6.0.5-install-centOS7_img/installProperly/configConf-port.png) 
     - line: 206  
     將守護程序(daemonize)設置為'yes' (默認情況下設置為'no'). 
         ![configConf-daemonize](./redis-6.0.5-install-centOS7_img/installProperly/configConf-daemonize.png)  
     - line: 228  
     將pidfile設置為/var/run/redis_6379.pid (如果需要，請修改port).
         ![configConf-pidfile](./redis-6.0.5-install-centOS7_img/installProperly/configConf-pidfile.png)  
-    - line: 228 (更改port)  
-    在本件範例中，使用默認的port (6379)，因此不需要修改.
-            ![configConf-port](./redis-6.0.5-install-centOS7_img/installProperly/configConf-port.png)  
     - line: 236  
     設置日誌級別.
         ![configConf-loglevel](./redis-6.0.5-install-centOS7_img/installProperly/configConf-loglevel.png)  
@@ -233,9 +238,6 @@ $ sudo cp src/redis-cli /usr/local/bin/
     - line: 346 (數據持久存放處)  
         將目錄設置為/var/redis/6379 (非常重要的步驟！).  
         ![configConf-dir](./redis-6.0.5-install-centOS7_img/installProperly/configConf-dir.png) 
-    - line: 69 (供外部訪問)<a name='(供外部訪問)'></a>  
-        將ip (預設127.0.0.1)修改為本(虛擬)機ip.
-    ![configConf-ip](./redis-6.0.5-install-centOS7_img/installProperly/configConf-ip.png) 
 
     備註: 若不好找可用/搜尋關鍵字.
 8. 將新的Redis腳本設為預設執行
