@@ -7,7 +7,7 @@
 - [啟動](#啟動)          
 - [使用內建客戶端與Redis溝通](#使用內建客戶端與redis溝通)          
 - [快速執行](#快速執行)
-- [安裝Redis(加強版)](#安裝Redis(加強版))         
+- [安裝(擴充DLC)](#安裝(擴充DLC))         
 - [關閉Server](#關閉server)  
 - [開啟外部訪問](#開啟外部訪問)      
 - [管理工具(Windows 10為例)](#管理工具windows-10為例)    
@@ -176,7 +176,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 
 ---
 
-## 安裝Redis(加強版)
+## 安裝(擴充DLC)
 ### 使用以下指令更適當地安裝Redis，以保存數據：[[14]](#[14])
 1. 假設已經將redis-server和redis-cli可執行文件複製到/usr/local/bin下，可透過以下指令檢查.
     ```shell
