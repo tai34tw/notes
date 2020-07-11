@@ -7,7 +7,7 @@
 - [啟動](#啟動)          
 - [使用內建客戶端與Redis溝通](#使用內建客戶端與redis溝通)          
 - [快速執行](#快速執行)
-- [安裝(擴充DLC)](#安裝(擴充DLC))         
+- [補充安裝(建議)](#補充安裝\(建議\))         
 - [關閉Server](#關閉server)  
 - [開啟外部訪問](#開啟外部訪問)      
 - [管理工具(Windows 10為例)](#管理工具windows-10為例)    
@@ -28,27 +28,37 @@ $ make distclean && make
 > - cc: Command not found -> 未有GCC編譯器(C語言)，安裝即可(版本更新如後). [[3]](#[3]) [[4]](#[4])
 > ![ccNotFound](./redis-6.0.5-install-centOS7_img/install/ccNotFound.png)  
 > 執行:  
->   1. $ cd redis-6.0.5
->   2. $ [sudo] yum install gcc 
->   3. 驗證gcc是否安裝成功: $ rpm -qa |grep gcc   
-> ![testGccInstallation](./redis-6.0.5-install-centOS7_img/install/testGccInstallation.png)  
->   4. $ make   
->   
+>   ```shell
+>   $ cd redis-6.0.5
+>   $ [sudo] yum install gcc 
+>   $ rpm -qa |grep gcc # 驗證gcc是否安裝成功
+>   ```    
+>   ![testGccInstallation](./redis-6.0.5-install-centOS7_img/install/testGccInstallation.png)  
+>   ```shell  
+>   $ make  
+>   ```
 > -  jemalloc/jemalloc.h: No such file or directory -> 上次編譯有殘留文件，需清理後再重新編譯. [[5]](#[5])  
 > ![jemalloc-jemallocNoSuchFileOrDirectory](./redis-6.0.5-install-centOS7_img/install/jemalloc-jemallocNoSuchFileOrDirectory.png)  
 >   
 > - server.c:5172:31: error: ‘struct redisServer’ has no member named 'XXXXX' -> gcc版本不夠新(CentOS 7 默認安裝4.8.5)，升級至gcc 9. [[6]](#[6])  
 > ![structRedisServerError](./redis-6.0.5-install-centOS7_img/install/structRedisServerError.png)  
 > 執行:
->   1. $ cd redis-6.0.5
->   2. $ make distclean # 清除編譯生成的文件.   
->   3. $ [sudo] yum -y install centos-release-scl
->   4. $ [sudo] yum -y install devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
->   5. $ scl enable devtoolset-9 bash # scl指令啟用只是臨時的，退出shell或重新打開一個shell就會恢復原系統gcc版本.
->   6. $ sudo sh -c "echo source /opt/rh/devtoolset-9/enable >> /etc/profile" # 執行以永久使用. [[7]](#[7])
->   7. 重打shell (或重開機)，再次編譯. 
->   8. $ gcc -v  # 驗證gcc版本.   
-> ![testGccV9](./redis-6.0.5-install-centOS7_img/install/testGccV9.png)  
+>   ```shell
+>   $ cd redis-6.0.5
+>   $ make distclean # 清除編譯生成的文件.   
+>   $ sudo yum -y install centos-release-scl
+>   $ sudo yum -y install devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils
+>   $ scl enable devtoolset-9 bash # scl指令啟用只是臨時的，退出shell或重新打開一個shell就會恢復原系統gcc版本.
+>   ```
+>   執行以永久使用. [[7]](#[7]) 
+>   ```shell
+>   $ sudo sh -c "echo source /opt/rh/devtoolset-9/enable >> /etc/profile"  
+>   ```
+>   重打shell (或重開機)，再次編譯.
+>   ```shell
+>   $ gcc -v  # 驗證gcc版本.    
+>   ```  
+>   ![testGccV9](./redis-6.0.5-install-centOS7_img/install/testGccV9.png)  
 
 安裝成功:   
 > ![installationSucceeds](./redis-6.0.5-install-centOS7_img/install/installationSucceeds.png)  
@@ -69,9 +79,11 @@ $ make test
 > - You need tcl 8.5 or newer in order to run the Redis test -> 未安裝tcl 8.5. [[8]](#[8])  
 > ![runTestError](./redis-6.0.5-install-centOS7_img/install/runTestError.png)  
 >   執行:  
->   1. $ cd redis-6.0.5
->   2. $ [sudo] yum install tcl   
->   3. 驗證tcl版本: $ echo "puts [info tclversion]" | tclsh   
+>   ```shell
+>   $ cd redis-6.0.5
+>   $ [sudo] yum install tcl   
+>   $ echo "puts [info tclversion]" | tclsh # 驗證tcl版本
+>   ```
 > ![testTclVersion](./redis-6.0.5-install-centOS7_img/install/testTclVersion.png)  
 >    
 > - *** [err]: Test FLUSHALL aborts bgsave in tests/integration/rdb.tcl -> 效能配置不足，增加效能配置即可 (測試無法通過，不代表Redis無法運行).[[9]](#[9])
@@ -96,32 +108,39 @@ $ make test
 $ cd redis-6.0.5
 $ src/redis-server
 ```
-> ### 可能錯誤:
+> ### 可能錯誤 (但可能不影響運行):
 > ![runRedisWithError](./redis-6.0.5-install-centOS7_img/install/runRedisWithError.png) 
 > - WARNING: The TCP backlog setting of 511 cannot be... (監聽佇列的長度預設128):   
 >       執行: [[10]](#[10])  
->    $ echo "net.core.somaxconn = 2048" | sudo tee -a /etc/sysctl.conf  
+>   ```shell
+>   $ echo "net.core.somaxconn = 2048" | sudo tee -a /etc/sysctl.conf 
+>   ``` 
 >   ![configsomaxconn](./redis-6.0.5-install-centOS7_img/config/configsomaxconn.png)
 > 
 > - WARNING overcommit_memory is set to 0! (内存分配策略參數設置為0):  
 >   執行:  
->    $ echo "vm.overcommit_memory = 1" | sudo tee -a /etc/sysctl.conf
+>   ```shell
+>   $ echo "vm.overcommit_memory = 1" | sudo tee -a /etc/sysctl.conf
+>   ```
 >    ![configOverCommitMemoryTo1](./redis-6.0.5-install-centOS7_img/config/configOverCommitMemoryTo1.png)  
 >  備註: 其他參數設定詳見: [[11]](#[11])[[12]](#[12]) 
 > 
 > - WARNING you have Transparent Huge Pages (THP) support enabled in your kernel (你使用的是透明大頁，可能導致redis延遲和內存使用問題)....  
 > 執行: [[13]](#[13])  
 >   - 暫時解決方法  
->       1. $ sudo su # 切換至root帳號，用sudo無法  
->       2. \# echo never > /sys/kernel/mm/transparent_hugepage/enabled
->       3. \# exit # 切換回User帳號
->   </br> </br>
+>       ```shell
+>       $ sudo su # 切換至root帳號，用sudo無法  
+>       # echo never > /sys/kernel/mm/transparent_hugepage/enabled
+>       # exit # 切換回User帳號
+>       ```
+>  
 >   - 永久解決方法  
->       1. $ sudo su
->       2. \# vim /etc/rc.local
->       3. 加上 echo never > /sys/kernel/mm/transparent_hugepage/enabled  
->       4. \# exit  
-> 
+>       ```shell
+>       $ sudo su
+>       # vim /etc/rc.local
+>       # echo never > /sys/kernel/mm/transparent_hugepage/enabled  
+>       # exit  
+>       ```  
 運行成功:
 ![runServerAfterResloveTHPError](./redis-6.0.5-install-centOS7_img/install/runServerAfterResloveTHPError.png)
  
@@ -176,7 +195,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 
 ---
 
-## 安裝(擴充DLC)
+## 補充安裝(建議)
 ### 使用以下指令更適當地安裝Redis，以保存數據：[[14]](#[14])
 1. 假設已經將redis-server和redis-cli可執行文件複製到/usr/local/bin下，可透過以下指令檢查.
     ```shell
@@ -204,13 +223,13 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ![configScript](./redis-6.0.5-install-centOS7_img/installProperly/configScript.png)  
 5. 找到當初下載Redis檔案處(同步驟1)之配置文件模板, 複製到/etc/redis /中
     - 名稱與port相同(例如6379)
-   ```shell
-   $ sudo cp redis.conf /etc/redis/6379.conf
-    ```
-    ![copyConfig](./redis-6.0.5-install-centOS7_img/installProperly/copyConfig.png) 
-6. 創建一個目錄，供Redis之數據和工作目錄使用
-   ```shell
-   $ sudo mkdir /var/redis/6379
+        ```shell
+        $ sudo cp redis.conf /etc/redis/6379.conf
+         ```
+        ![copyConfig](./redis-6.0.5-install-centOS7_img/installProperly/copyConfig.png) 
+6. 創建一個目錄，供Redis之數據和工作目錄使用  
+    ```shell   
+    $ sudo mkdir /var/redis/6379
     ```
 7. 編輯配置文件，確保執行以下更改(直接google翻譯) (路人翻譯版, 請詳見: https://kknews.cc/zh-tw/code/y326ymk.html): [[14]](#[14])[[15]](#[15])
     ``` shell
@@ -244,28 +263,28 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ```shell
     $ sudo update-rc.d redis_6379 defaults
     ```
-> ### 可能錯誤:
->  ![updateDefaults](./redis-6.0.5-install-centOS7_img/installProperly/updateDefaults.png) 
-> - sudo update-rc.d redis_6379 defaults 可能為Ubuntu 指令, CentOS不受用.  
-> 執行:  [[16]](#16])  
-> $ [sudo] chkconfig --add redis_6379   
-> $ [sudo] chkconfig redis_6379 on
+    > ### 可能錯誤:
+    >  ![updateDefaults](./redis-6.0.5-install-centOS7_img/installProperly/updateDefaults.png) 
+    > - sudo update-rc.d redis_6379 defaults 可能為Ubuntu 指令, CentOS不受用.  
+    > 執行:  [[16]](#16])  
+    > $ sudo chkconfig --add redis_6379   
+    > $ sudo chkconfig redis_6379 on
 
 9. 執行修改後的Redis
-```shell
-$ sudo /etc/init.d/redis_6379 start
-```
+    ```shell
+    $ sudo /etc/init.d/redis_6379 start
+    ```
 10. 檢視redis是否已經啟動  
-```shell
-$ ps -ef | grep redis  
-```
+    ```shell
+    $ ps -ef | grep redis  
+    ```
 - 啟動成功
  ![checkServerStatus](./redis-6.0.5-install-centOS7_img/installProperly/checkServerStatus.png) 
 
-11.  透過客戶端檢視Redis是否執行成功
-```shell
-redis-cli -h 192.168.200.136 -p 6379
-```
+11.  透過客戶端檢視Redis是否執行成功  
+        ```shell
+        $ redis-cli -h 192.168.200.136 -p 6379
+        ```
 - 啟動成功
  ![checkServerStatusByCli](./redis-6.0.5-install-centOS7_img/installProperly/checkServerStatusByCli.png) 
 
@@ -284,11 +303,10 @@ redis-cli -h 192.168.200.136 -p 6379
     查看原先開啟的Server端視窗 
     ![shutdown](./redis-6.0.5-install-centOS7_img/shutDown/shutdown.png)  
 
-- 可能不是好方法，但能正常退出: [[17]](#[17])
-  - 應該與上者類似，但未將數據保存.
-  ```shell
-  $ redis-cli SHUTDOWN NOSAVE
-  ```
+- 應該與上者類似，但未將數據保存(無法退出時，可用此指令): [[17]](#[17])
+    ```shell
+    $ redis-cli SHUTDOWN NOSAVE
+    ```
   查看原先開啟的Server端視窗  
    ![shutdownRedisServerAndNoSave](./redis-6.0.5-install-centOS7_img/shutDown/shutdownRedisServerAndNoSave.png)  
 
@@ -316,36 +334,48 @@ redis-cli -h 192.168.200.136 -p 6379
 
 ## 開啟外部訪問
 ###  使用以下指令使其Redis允許外部訪問:
-1. 編輯配置文件，確保執行以下更改(步驟同「安裝Redis(加強版)」[(供外部訪問)](#(供外部訪問))： [[15]](#[15])
+1. 編輯配置文件，確保執行以下更改(步驟同「補充安裝(建議)」[(供外部訪問)](#(供外部訪問))： [[15]](#[15])
     ``` shell
     $ sudo vim /etc/redis/6379.conf 
     ```
     將ip (預設127.0.0.1)修改為本(虛擬)機ip.
     ![configConf-ip](./redis-6.0.5-install-centOS7_img/installProperly/configConf-ip.png) 
-> ### 可能錯誤:
-> - 外部無法連線   
->   \> telnet 192.168.200.136 6379  
->     ![testConnection](./redis-6.0.5-install-centOS7_img/connect/telnetCentOS6379.png)
->   透過MobaXterm之掃port工具(上方工具列Tools > Ports scanner), Cent OS未外開Redis的port.
->   ![portsScanner](./redis-6.0.5-install-centOS7_img/connect/portsScanner.png)
-> 執行:
->   1. 確認防火牆是否開啟   
->      $ firewall-cmd --zone=public --list-all  
->   ![checkFirewall](./redis-6.0.5-install-centOS7_img/connect/checkFirewall.png)
->   2. 對外開放 6379 port  
->      $ firewall-cmd --zone=public --add-port=6379/tcp --permanent  
-> 備註: --permanent 指定為永久設定，否則在 firewalld 重啟或是重新讀取設定，就會失效.
-> ![enablePort6379](./redis-6.0.5-install-centOS7_img/connect/enablePort6379.png)
->   3. 重新讀取 firewall 設定  
->   $ firewall-cmd --reload
-> ![reloadFirewall](./redis-6.0.5-install-centOS7_img/connect/reloadFirewall.png)
->   4. 與步驟1同，再檢查一次指定port是否在開放清單內  
->       $ firewall-cmd --zone=public --list-all 
->    ![recheckFirewall](./redis-6.0.5-install-centOS7_img/connect/recheckFirewall.png)
->   5. 重新從本地端cmd測試  
->    \> telnet 192.168.200.136 6379  
->     成功, 就是黑黑的一片.  
->   ![retestConnection](./redis-6.0.5-install-centOS7_img/connect/retelnetCentOS6379.png)
+    > ### 可能錯誤:
+    > - 外部無法連線 (以win 10為例)
+    >    ``` cmd 
+    >   > telnet 192.168.200.136 6379 
+    >    ```
+    >     ![testConnection](./redis-6.0.5-install-centOS7_img/connect/telnetCentOS6379.png)
+    >   透過MobaXterm之掃port工具(上方工具列Tools > Ports scanner), Cent OS未外開Redis的port.
+    >   ![portsScanner](./redis-6.0.5-install-centOS7_img/connect/portsScanner.png)
+    > 執行:  
+    >   1. 確認防火牆是否開啟 
+    >       ``` shell
+    >       $ firewall-cmd --zone=public --list-all  
+    >       ```
+    >       ![checkFirewall](./redis-6.0.5-install-centOS7_img/connect/checkFirewall.png)
+    >   2. 對外開放 6379 port  
+    >       ``` shell  
+    >       $ firewall-cmd --zone=public --add-port=6379/tcp --permanent 
+    >       ``` 
+    >       備註: --permanent 指定為永久設定，否則在 firewalld 重啟或是重新讀取設定，就會失效.
+    >      ![enablePort6379](./redis-6.0.5-install-centOS7_img/connect/enablePort6379.png)
+    >   3. 重新讀取 firewall 設定  
+    >       ``` shell 
+    >       $ firewall-cmd --reload
+    >       ```
+    >       ![reloadFirewall](./redis-6.0.5-install-centOS7_img/connect/reloadFirewall.png)
+    >   4. 與步驟1同，再檢查一次指定port是否在開放清單內  
+    >       ``` shell
+    >       $ firewall-cmd --zone=public --list-all 
+    >       ``` 
+    >       ![recheckFirewall](./redis-6.0.5-install-centOS7_img/connect/recheckFirewall.png)
+    >   5. 重新從本地端cmd測試  
+    >       ``` cmd
+    >       > telnet 192.168.200.136 6379 
+    >       ``` 
+    >       成功, 就是黑黑的一片.  
+    >       ![retestConnection](./redis-6.0.5-install-centOS7_img/connect/retelnetCentOS6379.png)
 
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
