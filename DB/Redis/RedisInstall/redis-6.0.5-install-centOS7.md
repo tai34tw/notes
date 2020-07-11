@@ -30,7 +30,7 @@ $ make distclean && make
 > 執行:  
 >   ```shell
 >   $ cd redis-6.0.5
->   $ [sudo] yum install gcc 
+>   $ sudo yum install gcc 
 >   $ rpm -qa |grep gcc # 驗證gcc是否安裝成功
 >   ```    
 >   ![testGccInstallation](./redis-6.0.5-install-centOS7_img/install/testGccInstallation.png)  
@@ -81,7 +81,7 @@ $ make test
 >   執行:  
 >   ```shell
 >   $ cd redis-6.0.5
->   $ [sudo] yum install tcl   
+>   $ sudo yum install tcl   
 >   $ echo "puts [info tclversion]" | tclsh # 驗證tcl版本
 >   ```
 > ![testTclVersion](./redis-6.0.5-install-centOS7_img/install/testTclVersion.png)  
