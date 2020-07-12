@@ -1,4 +1,4 @@
-# Redis-6.0.5_docker版安裝-以Win 10為例
+# 安裝Redis-6.0.5_docker版-以Win 10為例
 <p style="text-align:right;">2020.07.12 蔡元泰製</p> 
 
 ## 目錄  
