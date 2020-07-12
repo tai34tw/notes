@@ -1,4 +1,4 @@
-# 安裝Redis-6.0.5-以CentOS 7為例
+# Redis-6.0.5安裝-以CentOS 7為例
 <p style="text-align:right;">2020.06.23 蔡元泰製</p> 
 
 ## 目錄
@@ -237,7 +237,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ```  
     - line: 69 (選用,供外部訪問)<a name='(供外部訪問)'></a>  
     將ip (預設127.0.0.1)修改為本(虛擬)機ip.  
-    綁定多個ip, 可使用bind 127.0.0.1 192.168.200.136  
+    綁定多個ip, 可使用bind 127.0.0.1 192.168.xxx.xxx  
         ![configConf-ip](./redis-6.0.5-install-centOS7_img/installProperly/configConf-ip.png) 
     - line: 92 (更改port)  
     在本件範例中，使用默認的port (6379)，因此不需要修改.
@@ -283,7 +283,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 
 11.  透過客戶端檢視Redis是否執行成功  
         ```shell
-        $ redis-cli -h 192.168.200.136 -p 6379
+        $ redis-cli -h 192.168.xxx.xxx -p 6379
         ```
 - 啟動成功
  ![checkServerStatusByCli](./redis-6.0.5-install-centOS7_img/installProperly/checkServerStatusByCli.png) 
@@ -343,7 +343,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
     > ### 可能錯誤:
     > - 外部無法連線 (以win 10為例)
     >    ``` cmd 
-    >   > telnet 192.168.200.136 6379 
+    >   > telnet 192.168.xxx.xxx 6379 
     >    ```
     >     ![testConnection](./redis-6.0.5-install-centOS7_img/connect/telnetCentOS6379.png)
     >   透過MobaXterm之掃port工具(上方工具列Tools > Ports scanner), Cent OS未外開Redis的port.
@@ -372,7 +372,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
     >       ![recheckFirewall](./redis-6.0.5-install-centOS7_img/connect/recheckFirewall.png)
     >   5. 重新從本地端cmd測試  
     >       ``` cmd
-    >       > telnet 192.168.200.136 6379 
+    >       > telnet 192.168.xxx.xxx 6379 
     >       ``` 
     >       成功, 就是黑黑的一片.  
     >       ![retestConnection](./redis-6.0.5-install-centOS7_img/connect/retelnetCentOS6379.png)
@@ -407,7 +407,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
             ![runRedisCommander](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/runRedisCommander.png)  
         - 連結至外部Redis
             ```shell
-            redis-commander --redis-host 192.168.200.136 --redis-port 6379
+            redis-commander --redis-host 192.168.xxx.xxx --redis-port 6379
             ```
   4. 將上述畫面ip (http://127.0.0.1:8081)以瀏覽器開啟  
       ![redisCommander-chrome](./redis-6.0.5-install-centOS7_img/redisManagementTools/redis-commander/redisCommander-chrome.png)
