@@ -1,4 +1,4 @@
-# Redis-6.0.5安裝-以CentOS 7為例
+# 安裝Redis-6.0.5-以CentOS 7為例
 <p style="text-align:right;">2020.06.23 蔡元泰製</p> 
 
 ## 目錄
