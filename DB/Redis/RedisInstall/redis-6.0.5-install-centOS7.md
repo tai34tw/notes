@@ -7,7 +7,8 @@
 - [啟動](#啟動)          
 - [使用內建客戶端與Redis溝通](#使用內建客戶端與redis溝通)          
 - [快速執行](#快速執行)
-- [建議安裝補充](#建議安裝補充)         
+- [建議安裝補充](#建議安裝補充)
+- [設定檔參數簡介](#設定檔參數簡介)         
 - [關閉Server](#關閉server)  
 - [開啟外部訪問](#開啟外部訪問)      
 - [管理工具(Windows 10為例)](#管理工具windows-10為例)    
@@ -287,6 +288,81 @@ $ sudo cp src/redis-cli /usr/local/bin/
         ```
 - 啟動成功
  ![checkServerStatusByCli](./redis-6.0.5-install-centOS7_img/installProperly/checkServerStatusByCli.png) 
+
+ <div style="text-align:center;">
+<a href="#目錄">回到目錄</a>
+</div>
+
+---
+## 設定檔參數簡介
+### 使用以下指令及說明瞭解配置參數：
+``` shell
+$ sudo vim /etc/redis/6379.conf 
+```  
+- line 18:  
+    units are case insensitive so 1GB 1Gb 1gB are all the same.  
+    大小寫不敏感，例如：1GB 1Gb 1gB 都是一樣的.  
+
+- line 35:   
+    include /path/to/local.conf  
+    include /path/to/other.conf  
+    共同配置檔位置(叢集式Redis方會使用到，單機版Redis則用不到).  
+
+- line 69:   
+    bind 127.0.0.1  
+    唯有與上述ip相符之機器方可訪問本Redis，設置多ip訪問須用空格隔開，例如：bind 192.168.1.100 10.0.0.1
+
+- line 88:   
+    protected-mode yes  
+    保護模式. 設定yes的情況下，在未bind任何允許訪問ip及未設定密碼時，僅允許本機訪問.  
+
+- line 92:  
+    port 6379  
+    啟動服務會佔用之port號.  
+
+- line 101:  
+    tcp-backlog 511  
+    最大隊列長度(可理解為最大請求排隊數)，應付突發的大並發連接請求. 但linux預設為128. 所以再啟動Redis時會出現警告，但可忽略.
+
+- line 130:  
+    tcp-keepalive 300  
+    客戶端空閒N秒(未發任何請求)後關閉連接.  
+
+- line 206:  
+    daemonize no  
+    是否為背景執行，no -> 不背景執行，表會有畫面可以看到監控畫面. yes -> 背景執行.  
+
+- line 228:  
+    pidfile /var/run/redis_6379.pid  
+    進程id (pid)存放位置(每次重新啟動產生不同的pid文件). 若直接輸入數字可供事後方便停止服務(kill -9)之用. 
+
+- line 236:  
+    loglevel notice  
+    日誌記錄級別.  
+
+- line 241:  
+    logfile ""  
+    指定日誌文件名(或日誌存放位置).  
+
+- line 256:  
+    databases 16  
+    資料庫數量.    
+
+- line 809:  
+    maxclients 10000  
+    最大客戶端數量.  
+
+- line 836:  
+    maxmemory <bytes>  
+    最大內存.
+
+- line 867:  
+    maxmemory-policy noeviction  
+    超過最大內存後所執行之策略.  
+
+- line 878:  
+    maxmemory-samples 5  
+    根據line 867「超過最大內存後所執行之策略」後，所刪除資料數.  
 
  <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
