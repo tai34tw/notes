@@ -3,7 +3,7 @@
 
 ## 目錄
 - [安裝](#安裝)        
-- [測試](#測試)        
+- [測試(可忽略)](#測試(可忽略))        
 - [啟動](#啟動)          
 - [使用內建客戶端與Redis溝通](#使用內建客戶端與redis溝通)          
 - [快速執行](#快速執行)
@@ -38,12 +38,16 @@ $ make distclean && make
 >   ```shell  
 >   $ make  
 >   ```
-> -  jemalloc/jemalloc.h: No such file or directory -> 上次編譯有殘留文件，需清理後再重新編譯. [[5]](#[5])  
-> ![jemalloc-jemallocNoSuchFileOrDirectory](./redis-6.0.5-install-centOS7_img/install/jemalloc-jemallocNoSuchFileOrDirectory.png)  
->   
+> -  jemalloc/jemalloc.h: No such file or directory -> 上次編譯有殘留文件，需清理後再重新編譯，並指定Redis分配器為libc
+> ![jemalloc-jemallocNoSuchFileOrDirectory](./redis-6.0.5-install-cluster-centOS7_img/install/jemalloc-jemallocNoSuchFileOrDirectory.png)  
+> 執行:  
+>       ```shell
+>       cd /opt/redis/redis-6.0.5
+>       sudo make distclean && make MALLOC=libc
+>       ``` 
 > - server.c:5172:31: error: ‘struct redisServer’ has no member named 'XXXXX' -> gcc版本不夠新(CentOS 7 默認安裝4.8.5)，升級至gcc 9. [[6]](#[6])  
 > ![structRedisServerError](./redis-6.0.5-install-centOS7_img/install/structRedisServerError.png)  
-> 執行:
+> 執行:  
 >   ```shell
 >   $ cd redis-6.0.5
 >   $ make distclean # 清除編譯生成的文件.   
@@ -70,7 +74,7 @@ $ make distclean && make
 
 ---
 
-## 測試 
+## 測試(可忽略) 
 ### 使用以下指令執行Redis運行測試：
 ```shell
 $ cd redis-6.0.5
