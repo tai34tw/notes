@@ -2,6 +2,7 @@
 <p style="text-align:right;">2020.06.23 蔡元泰製</p> 
 
 ---
+
 ## 安裝
 ### 使用以下指令下載，提取和編譯Redis：
 ``` shell
@@ -141,12 +142,12 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ```shell
     $ redis-server
     ```
-    ![getData](./redis-6.0.5-install-cluster-centOS7_img/install/runRedisDirectly.png) 
+    ![runRedisDirectly](./redis-6.0.5-install-cluster-centOS7_img/install/runRedisDirectly.png) 
 - 客戶端:
   ``` shell
   $ redis-cli
   ```
-     ![getData](./redis-6.0.5-install-cluster-centOS7_img/install/interactWithRedisDirectly.png)   
+     ![interactWithRedisDirectly](./redis-6.0.5-install-cluster-centOS7_img/install/interactWithRedisDirectly.png)   
 
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
@@ -237,12 +238,84 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ```
     > ### 可能錯誤:  
     > - Can't open the append-only file: Permission denied  
-    > ![getData](./redis-6.0.5-install-cluster-centOS7_img/clusterMode/append-onlyFile_PermissionDenied.png)  
-    >   原因:權限不足寫入aof日誌.  
+    > ![append-onlyFile_PermissionDenied](./redis-6.0.5-install-cluster-centOS7_img/clusterMode/append-onlyFile_PermissionDenied.png)  
+    >   原因: 權限不足寫入aof日誌.  
     >   執行下列指令開啟相關權限  
     >   ```shell 
     >   $ cd /opt/
     >   $ sudo chmod -R 775 redis # 修改目錄下權限
     >   $ sudo chown -R tai:root redis # 修改目錄(檔案)擁有者
     >   ```  
-    >   
+
+
+4. 測試是否啟動  
+   執行以下指令，檢視伺服器是否啟動.  
+    ```shell  
+    $ ps -ef | grep redis
+    ```  
+    成功啟動
+    ![ps-efGredis](./redis-6.0.5-install-cluster-centOS7_img/clusterMode/ps-efGredis.png)  
+
+5. 建立集群關係  
+   執行以下指令，建立Redis集群關係. Redis 5以上方可使用，以下則需使用redis-trib.rb建立(本篇不演示).  
+   ```shell  
+   $ redis-cli --cluster create 127.0.0.1:7000 127.0.0.1:7001  127.0.0.1:7002 127.0.0.1:8000 127.0.0.1:8001 127.0.0.1:8002  --cluster-replicas 1  # cluster-replicas 表示每1個主機要有1個從機.
+   ``` 
+   備註: 按照從主機到從機的方式， 從左到右，依次排列6個 Redis節點。
+    ![createClusterMode](./redis-6.0.5-install-cluster-centOS7_img/clusterMode/createClusterMode.png)  
+
+6. 檢視集群關係  
+    執行以下指令，檢視各port伺服器之間的關係.  
+    1. 以客戶端進入port 7000的Redis
+        ```shell  
+        $ redis-cluster]$ redis-cli -c -p 7000 # -c: cluster, -p: port  
+        $ 127.0.0.1:7000> info replication
+        ``` 
+        port 7000為主機，連接1個從.  
+        ![cluster-master](./redis-6.0.5-install-cluster-centOS7_img/clusterMode/cluster-master.png)  
+    2. 退出該客戶端  
+        ```shell  
+        $ 127.0.0.1:7000> quit
+        ``` 
+
+    3. 以客戶端進入port 8000的Redis  
+         ```shell  
+        $ redis-cluster]$ redis-cli -c -p 8000 
+        $ 127.0.0.1:8000> info replication
+        ```   
+        port 8000為從機. 跟隨之主機為port 7000.  
+        ![cluster-slave](./redis-6.0.5-install-cluster-centOS7_img/clusterMode/cluster-slave.png) 
+
+    4. 退出該客戶端  
+        ```shell  
+        $ 127.0.0.1:8000> quit  
+        ```   
+
+<div style="text-align:center;">
+<a href="#目錄">回到目錄</a>
+</div>
+
+---
+
+## 簡單測試  
+### 依循下列步驟，簡單測試Redis集群功能  
+
+
+
+<div style="text-align:center;">
+<a href="#目錄">回到目錄</a>
+</div>
+
+---  
+
+## 參考來源: 
+1. https://redis.io/topics/cluster-tutorial
+2. https://www.itread01.com/lqqf.html
+
+<div style="text-align:center;">
+<a href="#目錄">回到目錄</a>
+</div>
+
+---
+
+
