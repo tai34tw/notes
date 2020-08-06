@@ -10,7 +10,7 @@ $ cd /opt/redis
 $ wget http://download.redis.io/releases/redis-6.0.5.tar.gz
 $ tar xzf redis-6.0.5.tar.gz
 $ cd redis-6.0.5
-$ make distclean && make
+$ sudo make distclean && sudo make
 ```
 
 > ### 可能錯誤:  
@@ -24,7 +24,7 @@ $ make distclean && make
 >   ```    
 >   ![testGccInstallation](./redis-6.0.5-install-cluster-centOS7_img/install/testGccInstallation.png)  
 >   ```shell  
->   $ make  
+>   $ sudo make  
 >   ```
 > -  jemalloc/jemalloc.h: No such file or directory -> 上次編譯有殘留文件，需清理後再重新編譯，並指定Redis分配器為libc
 > ![jemalloc-jemallocNoSuchFileOrDirectory](./redis-6.0.5-install-cluster-centOS7_img/install/jemalloc-jemallocNoSuchFileOrDirectory.png)  
@@ -154,94 +154,95 @@ $ sudo cp src/redis-cli /usr/local/bin/
 
 ---
 
-## 啟動Redis集群模式-讀寫分離
-### 使用以下指令運行Redis集群模式-讀寫分離：  
-1. 將預設設定檔放置指定目錄下，並修改設定檔:
-   ```shell
-    $ mkdir /opt/redis/conf
-    $ cp /opt/redis/redis-6.0.5/redis.conf /opt/redis/conf/redis.conf # 做為主設定檔
-    $ chmod 775 /opt/redis/conf/redis.conf # 修改權限(可略)
-    $ vim /opt/redis/conf/redis.conf
+## 啟動Redis集群模式  
+### 依循下列步驟，啟動設置並啟動Redis集群模式  
+1. 建立相關目錄
+    ```shell  
+    $ cd /opt/redis
+    $ sudo mkdir redis-cluster
+    $ cd redis-cluster
+    $ sudo mkdir conf data log
+    $ sudo mkdir -p data/redis-7000 data/redis-7001 data/redis-7002 data/redis-8000 data/redis-8001 data/redis-8002
     ```  
-    - line: 69 (選用,供外部訪問)<a name='(供外部訪問)'></a>  
-    將ip (預設127.0.0.1)修改為本(虛擬)機ip.  
-    綁定多個ip, 可使用bind 127.0.0.1 192.168.xxx.xxx  
-        ![configConf-ip](./redis-6.0.5-install-cluster-centOS7_img/conf/configConf-ip.png) 
-    <!-- - line: 92 (更改port)  
-    在本件範例中，使用默認的port (6379)，因此不需要修改.
-        ![configConf-port](./redis-6.0.5-install-cluster-centOS7_img/conf/configConf-port.png)  -->
-    - line: 206  
-    將守護程序(背景執行)(daemonize)設置為'yes' (默認情況下設置為'no'). 
-        ![configConf-daemonize](./redis-6.0.5-install-cluster-centOS7_img/conf/configConf-daemonize.png)  
-    <!-- - line: 228  
-    將pidfile設置為/var/run/redis_6379.pid (如果需要，請修改port).
-        ![configConf-pidfile](./redis-6.0.5-install-cluster-centOS7_img/conf/configConf-pidfile.png)   -->
-    - line: 236  
-    設置日誌級別.
-        ![configConf-loglevel](./redis-6.0.5-install-cluster-centOS7_img/conf/configConf-loglevel.png)  
-    <!-- - line: 241 (日誌檔案的地址)  
-    將日誌文件設置為/var/log/redis_6379.log, 該路徑一定要是文件夾.  
-        ![configConf-logfile](./redis-6.0.5-install-cluster-centOS7_img/conf/configConf-logfile.png)   -->
-    <!-- - line: 346 (數據持久存放處)  
-        將目錄設置為/var/redis/6379 (非常重要的步驟！).  
-        ![configConf-dir](./redis-6.0.5-install-cluster-centOS7_img/conf/configConf-dir.png)  -->
+    備註: port: 7000為主機(master)，8000則為從機(slave)，以利區分.  
 
-2. 複製設定檔為master, slave設定檔至ms目錄下:  
-    - port: 6379為master，其他則為slave.  
-   ```shell
-    $ mkdir /opt/redis/conf/ms
-    $ cd /opt/redis/conf/ms
-    $ for i in {6379..6382} # 利用迴圈複製設定檔，並以port命名
-    $ do
-    $ sudo touch redis$i.conf
-    $ sudo chmod 775 redis$i.conf # 修改權限(可略)
-    $ # 將相關設定寫入conf
-    $ echo "include /opt/redis/conf/redis.conf" >> redis$i.conf # 其他設定檔依設定檔為主
-    $ echo "pidfile /var/run/redis_$i.pid" >> redis$i.conf # pid寫入位置
-    $ echo "port $i" >> redis$i.conf # port號
-    $ echo "dbfilename dump$i.rdb" >> redis$i.conf # db名稱
-    $ if [ $i -ne 6379 ] 
-    $ then 
-    $ echo "slaveof local 6379" >> redis$i.conf # 以port 6379 為master, 自己為slave
-    $ echo "slave port : $i"
-    $ else
-    $ echo "master port : $i"
-    $ fi 
-    $ done
-    ```  
-    或直接複製:  
-    for i in {6379..6382};   
-        do  
-            sudo touch redis$i.conf;   
-            sudo chmod 775 redis$i.conf;  
-            echo "include /opt/redis/conf/redis.conf" >> redis$i.conf ;   
-            echo "pidfile /var/run/redis_$i.pid" >> redis$i.conf ;   
-            echo "port $i" >> redis$i.conf ;   
-            echo "dbfilename dump$i.rdb" >> redis$i.conf ;    
-            if [ $i -ne 6379 ] ;  
-                then echo "slaveof local 6379" >> redis$i.conf;   
-                echo "slave port : $i";   
-            else   
-                echo "master port : $i  ";   
-            fi ;  
-        done  
-
-3. 啟動伺服器
-    使用以下指令啟動伺服器:
-    ```shell 
-    $ for i in {6379..6382};   
-    $ do  
-    $ redis-server /opt/redis/conf/ms/redis$i.conf
-    $ done 
-    ```  
-    或直接複製:  
-    for i in {6379..6382};   
-        do  
-            redis-server /opt/redis/conf/ms/redis$i.conf  
-        done 
-4. 驗證是否啟動  
+2. 建置Redis相關配置檔  
+      1. 建立配置檔(依port命名)  
+         ``` shell  
+         $ cd /opt/redis/redis-cluster/conf
+         $ sudo cp /opt/redis/redis-6.0.5/redis.conf redis.conf
+         $ touch redis-7000.conf redis-7001.conf redis-7002.conf
+         $ touch redis-8000.conf redis-8001.conf redis-8002.conf
+         $ sudo chmod 775 * # 如果有需要，統一修改權限
+         ```  
+      2. 編輯配置檔(以7000為例)  
+         ```shell  
+         $ sudo vim redis-7000.conf 
+         ```   
+         
+           - 於配置檔中，輸入相關配置  
+            
+            ```shell  
+            include /opt/redis/redis-cluster/conf/redis.conf
+            daemonize yes  
+            bind 127.0.0.1 192.168.200.141  
+            dir /opt/redis/redis-cluster/data/redis-7000  
+            pidfile /var/run/redis-cluster/redis-7000.pid  
+            logfile /opt/redis/redis-cluster/log/redis-7000.log
+            port 7000  
+            cluster-enabled yes  
+            cluster-config-file /opt/redis/redis-cluster/conf/node-7000.conf  
+            cluster-node-timeout 10000  
+            appendonly yes  
+            ```  
+   
+           - 參數說明:  
+            ```shell  
+            # 其他本配置檔未設定之設定參照來源   
+            include /opt/redis/redis-cluster/conf/redis.conf  
+            
+            # 守護模式(背景執行)  
+            daemonize yes  
+            # 繫結的主機埠  
+            bind 127.0.0.1 192.168.200.141 # 外部ip依需求調整   
+            # 資料存放目錄  
+            dir /opt/redis/redis-cluster/data/redis-7000  
+            # 程序檔案  
+            pidfile /var/run/redis-cluster/redis-7000.pid  
+            # 日誌檔案  
+            logfile /opt/redis/redis-cluster/log/redis-7000.log  
+            # 埠號  
+            port 7000  
+            # 開啟叢集模式  
+            cluster-enabled yes  
+            # 叢集的配置，配置檔案首次啟動自動生成  
+            cluster-config-file /opt/redis/redis-cluster/conf/node-7000.conf  
+            # 請求超時，設定10秒  
+            cluster-node-timeout 10000
+            # aof日誌開啟，有需要就開啟，它會每次寫操作都記錄一條日誌  
+            appendonly yes  
+            ```
+           - 其他配置檔(7001, 7002, 8000, 8001, 8002)，同理.  
+  
+3. 啟動伺服器  
+    執行下列指令，以啟動伺服器.  
     ```shell
-    $ ps -ef | grep redis  
+    $ cd /opt/redis/redis-cluster
+    $ redis-server conf/redis-7000.conf
+    $ redis-server conf/redis-7001.conf
+    $ redis-server conf/redis-7002.conf
+    $ redis-server conf/redis-8000.conf
+    $ redis-server conf/redis-8001.conf
+    $ redis-server conf/redis-8002.conf
     ```
-    啟動成功  
-    ![configConf-daemonize](./redis-6.0.5-install-cluster-centOS7_img/cluster-ms1/runSuccess.png)  
+    > ### 可能錯誤:  
+    > - Can't open the append-only file: Permission denied  
+    > ![getData](./redis-6.0.5-install-cluster-centOS7_img/clusterMode/append-onlyFile_PermissionDenied.png)  
+    >   原因:權限不足寫入aof日誌.  
+    >   執行下列指令開啟相關權限  
+    >   ```shell 
+    >   $ cd /opt/
+    >   $ sudo chmod -R 775 redis # 修改目錄下權限
+    >   $ sudo chown -R tai:root redis # 修改目錄(檔案)擁有者
+    >   ```  
+    >   
