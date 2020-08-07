@@ -187,12 +187,12 @@ $ sudo cp src/redis-cli /usr/local/bin/
     ```shell
     $ redis-server
     ```
-    ![getData](./redis-6.0.5-install-centOS7_img/install/runRedisDirectly.png) 
+    ![runRedisDirectly](./redis-6.0.5-install-centOS7_img/install/runRedisDirectly.png) 
 - 客戶端:
   ``` shell
   $ redis-cli
   ```
-     ![getData](./redis-6.0.5-install-centOS7_img/install/interactWithRedisDirectly.png)   
+     ![interactWithRedisDirectly](./redis-6.0.5-install-centOS7_img/install/interactWithRedisDirectly.png)   
 
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>

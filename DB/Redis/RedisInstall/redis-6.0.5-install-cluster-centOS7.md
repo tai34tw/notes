@@ -299,12 +299,64 @@ $ sudo cp src/redis-cli /usr/local/bin/
 
 ## 簡單測試  
 ### 依循下列步驟，簡單測試Redis集群功能  
+1. 進入port 7000客戶端，輸入1筆資料  
+   ```shell 
+   $ redis-cli -c -p 7000  
+   127.0.0.1:7000> set k1 v1  
+   ```
+   資料自動分配存入port 7001 Redis.  
+    ![setDataToPort7000](./redis-6.0.5-install-cluster-centOS7_img/simpleClusterTest/setDataToPort7000.png)
 
-
+2. 進入port 7001客戶單，讀取1筆資料  
+    ```shell 
+    127.0.0.1:7000> quit # 退出port 7000客戶端  
+    $ redis-cli -c -p 7001  
+    127.0.0.1:7001> get k1 # 讀取資料  
+    ```
+    成功從port 7001 Redis讀取資料.  
+    ![getDataFromPort7001](./redis-6.0.5-install-cluster-centOS7_img/simpleClusterTest/getDataFromPort7001.png)
 
 <div style="text-align:center;">
 <a href="#目錄">回到目錄</a>
 </div>
+
+---  
+
+## 開啟外部連線功能
+### 執行下列指令，開啟CentOS 7 防火牆之port  
+1. 開啟redis port
+    ```shell
+    $ sudo firewall-cmd --zone=public --add-port=7001/tcp --permanent
+    $ sudo firewall-cmd --zone=public --add-port=7002/tcp --permanent
+    $ sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent
+    $ sudo firewall-cmd --zone=public --add-port=8001/tcp --permanent
+    $ sudo firewall-cmd --zone=public --add-port=8002/tcp --permanent
+    ```  
+    成功  
+    ![firewall-openPort](./redis-6.0.5-install-cluster-centOS7_img/connect/firewall-openPort.png)  
+2. 重啟防火牆 
+   ```shell  
+   $ sudo firewall-cmd --reload
+   ````  
+   成功  
+    ![firewall-openPort](./redis-6.0.5-install-cluster-centOS7_img/connect/reloadFirewall.png)  
+3. 檢測是否有成功開啟對外port
+    ```shell 
+    $ sudo firewall-cmd --zone=public --query-port=7000/tcp
+    $ sudo firewall-cmd --zone=public --query-port=7001/tcp
+    $ sudo firewall-cmd --zone=public --query-port=7002/tcp
+    $ sudo firewall-cmd --zone=public --query-port=8000/tcp
+    $ sudo firewall-cmd --zone=public --query-port=8001/tcp
+    $ sudo firewall-cmd --zone=public --query-port=8002/tcp  
+    ```  
+    成功  
+    ![firewall-status](./redis-6.0.5-install-cluster-centOS7_img/connect/firewall-status.png)  
+4. 簡單的使用本地端cmd測試  
+    ```shell  
+    > telent 192.168.xxx.xxx 7000  
+    ````
+    成功，就是黑壓壓的一片  
+    ![remoteConcectRedis](./redis-6.0.5-install-cluster-centOS7_img/connect/remoteConcectRedis.png) 
 
 ---  
 
