@@ -11,6 +11,11 @@
 
 ---
 
+## 注意事項: 
+### 若有使用VMware等虛擬機器軟體，本文不建議於Windows上安裝Docker，避免前述等軟體在使用上的麻煩.  
+
+---
+
 ## 前言   
 因Redis Windows版僅支援到Redis 3.2 版，所以採以doker安裝Redis-6.0.5版. [[1]](#[1])  
 <https://github.com/MicrosoftArchive/redis>  
@@ -38,9 +43,7 @@ https://hub.docker.com/editions/community/docker-ce-desktop-windows/
    成功
    ![completeInstallOfDockerForWin](./redis-6.0.5-docker-install-win10_img/dockerInstall/dockerVersion.png) 
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄) 
 
 ---
 
@@ -63,9 +66,7 @@ https://hub.docker.com/editions/community/docker-ce-desktop-windows/
       有容器在執行, 成功!
       ![dockerDashboardWithContainer](./redis-6.0.5-docker-install-win10_img/testDocker/dockerDashboardWithContainer.png) 
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄) 
 
 ---
 
@@ -91,9 +92,7 @@ https://hub.docker.com/editions/community/docker-ce-desktop-windows/
    ![checkRedisContainer](./redis-6.0.5-docker-install-win10_img/installRedis_docker/checkRedisContainer.png)
 5. 成功!
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄) 
 
 ---
 
@@ -120,9 +119,7 @@ https://hub.docker.com/editions/community/docker-ce-desktop-windows/
    ```
       ![getData](./redis-6.0.5-docker-install-win10_img/installRedis_docker/getData.png)
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄) 
 
 ---
 

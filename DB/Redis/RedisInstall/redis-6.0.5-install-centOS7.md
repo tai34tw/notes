@@ -68,9 +68,7 @@ $ make distclean && make
 安裝成功:   
 > ![installationSucceeds](./redis-6.0.5-install-centOS7_img/install/installationSucceeds.png)  
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
 
 ---
 
@@ -101,9 +99,7 @@ $ make test
 運行測試通過:   
 ![testSucceeds](./redis-6.0.5-install-centOS7_img/install/testSucceeds.png)  
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
 
 ---
 
@@ -149,9 +145,7 @@ $ src/redis-server
 運行成功:
 ![runServerAfterResloveTHPError](./redis-6.0.5-install-centOS7_img/install/runServerAfterResloveTHPError.png)
  
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
 
 ---
 
@@ -168,9 +162,7 @@ $ src/redis-cli
 - 搜尋資料: > get foo  
 ![getData](./redis-6.0.5-install-centOS7_img/install/getData.png) 
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
 
 ---
 
@@ -194,9 +186,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
   ```
      ![interactWithRedisDirectly](./redis-6.0.5-install-centOS7_img/install/interactWithRedisDirectly.png)   
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
 
 ---
 
@@ -293,9 +283,7 @@ $ sudo cp src/redis-cli /usr/local/bin/
 - 啟動成功
  ![checkServerStatusByCli](./redis-6.0.5-install-centOS7_img/installProperly/checkServerStatusByCli.png) 
 
- <div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
 
 ---
 ## 設定檔參數簡介
@@ -368,10 +356,7 @@ $ sudo vim /etc/redis/6379.conf
     maxmemory-samples 5  
     根據line 867「超過最大內存後所執行之策略」後，所刪除資料數.  
 
- <div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
-
+[回到目錄](#目錄)
 ---
 
 ## 關閉Server
@@ -406,9 +391,7 @@ $ sudo vim /etc/redis/6379.conf
     查看原先開啟的Server端視窗  
     ![kill-9RedisServer](./redis-6.0.5-install-centOS7_img/shutDown/kill-9RedisServer.png)
     
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
 
 ---
 
@@ -457,10 +440,7 @@ $ sudo vim /etc/redis/6379.conf
     >       成功, 就是黑黑的一片.  
     >       ![retestConnection](./redis-6.0.5-install-centOS7_img/connect/retelnetCentOS6379.png)
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
-
+[回到目錄](#目錄)
 ---
 
 ## 管理工具(Windows 10為例)
@@ -495,9 +475,7 @@ $ sudo vim /etc/redis/6379.conf
 
 備註:其他管理工具GUI: [[20]](#[20]) 
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
 
 ---
 
@@ -523,6 +501,4 @@ $ sudo vim /etc/redis/6379.conf
 19. https://www.npmjs.com/package/redis-commander <a name='[19]'></a>
 20. https://redislabs.com/blog/so-youre-looking-for-the-redis-gui/ <a name='[20]'></a>
 
-<div style="text-align:center;">
-<a href="#目錄">回到目錄</a>
-</div>
+[回到目錄](#目錄)
